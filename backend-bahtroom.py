@@ -2,7 +2,9 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import Optional
 from fastapi.encoders import jsonable_encoder
+import json
 import datetime
+import requests
 
 from pymongo import MongoClient
 
@@ -12,21 +14,16 @@ client = MongoClient('mongodb://localhost', 27017)
 db = client["Bathroom"]
 menu_collection = db['Record']
 
-# แค่สมมติ
-status1 = True
-status2 = True
-status3 = False
-
 
 class Bathroom(BaseModel):
-    number: str
-    available: bool
-    start_time: str  # iso datetime format: 2020-07-10 15:00:00.000
-    end_time: str
+    number: int
+    available: int
 
 
-@app.post("/bathroom/new-bathroom")
+@app.post("/bathroom/new-entry")
 def add_bathroom(bathroom: Bathroom):
-    b = jsonable_encoder(bathroom)
+    bathroom_dict = {'number': bathroom.number, 'available': bathroom.available,
+                     'start_time': f'{datetime.datetime.now()}', 'end_time': None}
+    b = json.dumps(bathroom_dict)
     print(b)
     menu_collection.insert_one(b)
