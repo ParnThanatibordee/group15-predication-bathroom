@@ -69,8 +69,8 @@ def update(bathroom: Bathroom):
                                 "end_time": f'{datetime.datetime.now()}'}}
                 menu_collection.update_one(query, new)
 
-                start = datetime.datetime.strptime(res["start_time"], '%Y-%m-%d %H:%M:%S.%f')
                 res = menu_collection.find_one({"number": num}, {"_id": 0})
+                start = datetime.datetime.strptime(res["start_time"], '%Y-%m-%d %H:%M:%S.%f')
                 stop = datetime.datetime.strptime(res["end_time"], '%Y-%m-%d %H:%M:%S.%f')
                 dur = stop - start
 
