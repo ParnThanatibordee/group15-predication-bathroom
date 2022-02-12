@@ -10,16 +10,12 @@ app = FastAPI()
 
 client = MongoClient('mongodb://localhost', 27017)
 db = client["Bathroom"]
-menu_collection = db['menu06']
-
-# แค่สมมติ
-status1 = True
-status2 = True
-status3 = False
+estimate_collection = db['estimate']
 
 
-class Menu(BaseModel):
-    number: str
-    available: bool
-    start_time: str  # iso datetime format: 2020-07-10 15:00:00.000
-    end_time: str
+@app.put("/bathroom/estimate")
+def estimate_time():
+    result = estimate_collection.find_one()
+    estimate = result["sum_time"]/result["sum_used"]
+    new_values = { "$set": {"estimate": estimate}}
+    estimate_collection.update_one({}, new_values)
