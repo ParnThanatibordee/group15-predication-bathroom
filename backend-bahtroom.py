@@ -19,3 +19,4 @@ def estimate_time():
     estimate = result["sum_time"]/result["sum_used"]
     new_values = { "$set": {"estimate": estimate}}
     estimate_collection.update_one({}, new_values)
+    return estimate
