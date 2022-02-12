@@ -53,7 +53,7 @@ def estimate_time():
     return estimate
 
 
-@app.put("/bathroom/update/")
+@app.post("/bathroom/update/")
 def update(bathroom: Bathroom):
     num = bathroom.number
     chk = bathroom.available
