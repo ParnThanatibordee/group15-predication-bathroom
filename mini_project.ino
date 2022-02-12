@@ -37,12 +37,6 @@ void WiFi_Connect(){
   Serial.println(WiFi.localIP());
 }
 
-void show_st(){
-  Serial.printf("statusroom1 : %d\n",st1);
-  Serial.printf("statusroom2 : %d\n",st2);
-  Serial.printf("statusroom3 : %d\n",st3);
-}
-
 void _post(){
   if(WiFi.status() == WL_CONNECTED){
     for(int i=0;i<3;i++){
@@ -56,6 +50,7 @@ void _post(){
 
       serializeJson(JSONPost, str);
       int httpCode = http.POST(str);
+      Serial.printf("\nTry to send status room : %d\n",st[i]);
     
       if(httpCode == HTTP_CODE_OK){
         String payload = http.getString();
@@ -119,15 +114,6 @@ void TaskA(void *parameter){
 }  
 
 void loop() {
-  Serial.println("------------");
-  Serial.println("ldr1 : ");
-  Serial.println(analogRead(ldr1));
-  Serial.println("ldr2 : ");
-  Serial.println(analogRead(ldr2));
-  Serial.println("ldr3 : ");
-  Serial.println(analogRead(ldr3));
-  show_st();
   _post();
-  Serial.println("------------");
   delay(1000);
 }
