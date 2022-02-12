@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import Optional
 from fastapi.encoders import jsonable_encoder
+import datetime
 
 from pymongo import MongoClient
 
@@ -14,5 +15,5 @@ menu_collection = db['menu06']
 
 class Menu(BaseModel):
     number: str
-    start_time: int
-    end_time: int
+    start_time: str
+    end_time: str
