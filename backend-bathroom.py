@@ -47,13 +47,16 @@ def get_bathroom():
 @app.put("/bathroom/estimate")
 def estimate_time():
     result = estimate_collection.find_one()
-    estimate = result["sum_time"]/result["sum_used"]
+    if result["sum_used"] == 0 :
+        estimate = 0
+    else:
+        estimate = result["sum_time"]/result["sum_used"]
     new_values = {"$set": {"estimate": estimate}}
     estimate_collection.update_one({}, new_values)
     return estimate
 
 
-@app.post("/bathroom/update/")
+@app.post("/bathroom/update")
 def update(bathroom: Bathroom):
     num = bathroom.number
     chk = bathroom.available
@@ -67,12 +70,13 @@ def update(bathroom: Bathroom):
                 menu_collection.update_one(query, new)
 
                 start = datetime.datetime.strptime(res["start_time"], '%Y-%m-%d %H:%M:%S.%f')
-                stop = datetime.datetime.strptime(res["start_time"], '%Y-%m-%d %H:%M:%S.%f')
+                res = menu_collection.find_one({"number": num}, {"_id": 0})
+                stop = datetime.datetime.strptime(res["end_time"], '%Y-%m-%d %H:%M:%S.%f')
                 dur = stop - start
 
                 res2 = estimate_collection.find_one()
                 new_sum_time = {"$set": {"sum_time": res2["sum_time"] + dur.total_seconds()}}
-                new_sum_used = {"$set": {"sum_use": res2["sum_used"] + 1}}
+                new_sum_used = {"$set": {"sum_used": res2["sum_used"] + 1}}
                 estimate_collection.update_one({}, new_sum_time)
                 estimate_collection.update_one({}, new_sum_used)
         else:
