@@ -12,6 +12,11 @@ client = MongoClient('mongodb://localhost', 27017)
 db = client["Bathroom"]
 menu_collection = db['menu06']
 
+# แค่สมมติ
+status1 = True
+status2 = True
+status3 = False
+
 
 class Menu(BaseModel):
     number: str
