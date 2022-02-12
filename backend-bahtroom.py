@@ -24,17 +24,7 @@ class Bathroom(BaseModel):
     #start_time: str  # iso datetime format: 2020-07-10 15:00:00.000
     #end_time: str
 
-# @app.put("/bathroom/update/{num}")
-# def update(num: str):
-#     lst=[]
-#     for i in menu_collection.find({"number": num},{"end_time": None}):
-#         lst.append(i)
-#         break
 
-#     if(len(lst) > 0):
-#         pass
-#     else:
-#         raise HTTPException(404, f"This room is not used")
 
 @app.put("/bathroom/update/")
 def update(bathroom: Bathroom):
