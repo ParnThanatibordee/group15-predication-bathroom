@@ -11,6 +11,8 @@ app = FastAPI()
 client = MongoClient('mongodb://localhost', 27017)
 db = client["Bathroom"]
 menu_collection = db['Record']
+estimate_collection = db['estimate']
+
 
 # แค่สมมติ 
 status1 = True
@@ -19,21 +21,38 @@ status3 = False
 
 
 class Bathroom(BaseModel):
-    number: str
+    number: int
     available: bool
-    #start_time: str  # iso datetime format: 2020-07-10 15:00:00.000
-    #end_time: str
-
-
 
 @app.put("/bathroom/update/")
 def update(bathroom: Bathroom):
-    query = {"number": bathroom.number, "start_time": bathroom.start_time}
-    if(len(query) > 0):
-        new = { "$set": {"end_time": "out"}}
-        menu_collection.update_one(query, new)
-        return "Update completed."
-    else:
-        raise HTTPException(404, f"This room is not used")
+    num = bathroom.number
+    chk = bathroom.available
+    if((num >= 1 and num <= 3)):
+        res = menu_collection.find_one({"number": num}, {"_id": 0})
+        query = {"number": num}
+        if chk: #ว่าง
+             if not res["available"]:#0 1 มีคนออก
+                new = { "$set": {"available": True, 
+                "end_time":f'{datetime.datetime.now()}'}}
+                menu_collection.update_one(query, new)
 
-#uvicorn backend-bahtroom:app --reload
+
+                start = datetime.datetime.strptime(res["start_time"], '%Y-%m-%d %H:%M:%S.%f')
+                stop = datetime.datetime.strptime(res["start_time"], '%Y-%m-%d %H:%M:%S.%f')
+                dur = stop - start
+   
+                res2 = estimate_collection.find_one()
+                new_sum_time = { "$set": {"sum_time": res2["sum_time"] + dur.total_seconds()}}
+                new_sum_used = { "$set": {"sum_use": res2["sum_used"] + 1}}
+                estimate_collection.update_one({},  new_sum_time)
+                estimate_collection.update_one({},  new_sum_used)
+        else: #มีคน
+            if res["available"]: #1 0 มีคนเข้าใหม่
+                new = { "$set": {"available": False, 
+                'start_time': f'{datetime.datetime.now()}', 
+                'end_time': None}}
+                menu_collection.update_one(query, new)
+        return res
+    else:
+        raise HTTPException(404, "Update failed.")
