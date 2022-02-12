@@ -14,13 +14,8 @@ function App() {
     setInterval(getData, 1000)
   }, [])
 
-  const fetchData = async () => {
-    const { data } = await axios.get("https://randomuser.me/api/")
-    console.log(data)
-  }
-
   const getData = async () => {
-    const response = await axios.get("data.json")
+    const response = await axios.get("https://ecourse.cpe.ku.ac.th/exceed15/api/bathroom/get-record")
     setRoomData(response.data)
   }
 

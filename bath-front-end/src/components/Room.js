@@ -6,11 +6,11 @@ function addZero(i) {
 }
 
 export const Room = ({ room }) => {
-    var startTime = room.start_time === 'none' ? null : new Date(room.start_time)
+    var startTime = new Date(room.start_time)
     const [time, setTime] = useState("")
 
     useEffect(() => {
-        if (startTime) {
+        if (!room.available && startTime) {
             setInterval(() => {
                 updateDuration()
             }, 1000)
@@ -23,6 +23,7 @@ export const Room = ({ room }) => {
         const min = parseInt(dif / 60);
         const second = parseInt(dif % 60);
         const temp = `${min < 10 ? '0' : ''}${min}:${second < 10 ? '0' : ''}${second}`
+        console.log(room.number, temp)
         setTime(temp)
     }
 
@@ -30,7 +31,7 @@ export const Room = ({ room }) => {
         <div className={`restroom-card ${room.available ? 'free' : 'busy'}`}>
             {room.number}
             <div className='status'>ห้อง{!room.available && 'ไม่'}ว่าง</div>
-            {startTime &&
+            {!room.available && startTime &&
                 <>
                     <div className="enter-time">
                         เวลาที่เข้า {startTime.getHours()}:{addZero(startTime.getMinutes())} น.
