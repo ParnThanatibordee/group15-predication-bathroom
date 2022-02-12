@@ -18,8 +18,15 @@ status2 = True
 status3 = False
 
 
-class Menu(BaseModel):
+class Bathroom(BaseModel):
     number: str
     available: bool
     start_time: str  # iso datetime format: 2020-07-10 15:00:00.000
     end_time: str
+
+
+@app.post("/bathroom/new-bathroom")
+def add_bathroom(bathroom: Bathroom):
+    b = jsonable_encoder(bathroom)
+    print(b)
+    menu_collection.insert_one(b)
