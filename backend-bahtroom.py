@@ -13,6 +13,8 @@ app = FastAPI()
 
 client = MongoClient('mongodb://localhost', 27017)
 db = client["Bathroom"]
+estimate_collection = db['estimate']
+
 menu_collection = db['Record']
 
 
@@ -42,5 +44,10 @@ def get_bathroom():
              }
 
 
+@app.put("/bathroom/estimate")
 def estimate_time():
-    return 0
+    result = estimate_collection.find_one()
+    estimate = result["sum_time"]/result["sum_used"]
+    new_values = { "$set": {"estimate": estimate}}
+    estimate_collection.update_one({}, new_values)
+    return estimate
