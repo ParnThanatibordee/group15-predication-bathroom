@@ -27,3 +27,16 @@ def add_bathroom(bathroom: Bathroom):
     b = json.dumps(bathroom_dict)
     print(b)
     menu_collection.insert_one(b)
+
+
+@app.get("/bathroom/get-record")
+def get_bathroom():
+    estimate_t = estimate_time()
+    room = menu_collection.find({}, {"_id": 0, "number": 1, "available": 1, "start_time": 1, "end_time": 0})
+    return {"estimatedTime": estimate_t,
+            "room": room
+            }
+
+
+def estimate_time():
+    return 0
