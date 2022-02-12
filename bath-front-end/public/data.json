@@ -1,0 +1,20 @@
+{
+    "estimatedTime": 124,
+    "room": [
+        {
+            "number": 1,
+            "available": true,
+            "start_time": "none"
+        },
+        {
+            "number": 2,
+            "available": false,
+            "start_time": "2022-02-12T16:35:00+0700"
+        },
+        {
+            "number": 3,
+            "available": false,
+            "start_time": "2022-02-12T16:01:00+0700"
+        }
+    ]
+}
