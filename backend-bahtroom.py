@@ -15,5 +15,6 @@ menu_collection = db['menu06']
 
 class Menu(BaseModel):
     number: str
-    start_time: str
+    available: bool
+    start_time: str  # iso datetime format: 2020-07-10 15:00:00.000
     end_time: str
