@@ -10,7 +10,7 @@ app = FastAPI()
 
 client = MongoClient('mongodb://localhost', 27017)
 db = client["Bathroom"]
-menu_collection = db['menu06']
+menu_collection = db['Record']
 
 # แค่สมมติ
 status1 = True
