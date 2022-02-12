@@ -48,7 +48,7 @@ def get_bathroom():
     result = []
     print(room)
     for r in room:
-        result.append({'number': r['number'], 'available': r['available'], 'start_time': r['start_time']})
+        result.append({'number': r['number'], 'available': r['available'], 'start_time': r['start_time'].isoformat()})
         print(r)
     return {"estimatedTime": estimate_t,
             "room": result
